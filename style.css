@@ -119,6 +119,12 @@ main {
   overflow-x: hidden; /* hide horizontal scroll */
 }
 
+/* scroll for big table */
+.table-wrap.scroll {
+  max-height: 330px;
+  overflow-y: auto;
+}
+
 /* table main style */
 .table-wrap table {
   width: 100%;
@@ -126,7 +132,7 @@ main {
   table-layout: fixed; /* fix column width */
 }
 
-/* table th and td */
+/* tablr th and td */
 table th,
 table td {
   padding: 6px 6px;
@@ -169,6 +175,14 @@ table tbody tr:nth-child(even) {
   text-align: center;
 }
 
+/* sticky header */
+
+table th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 /* table buttons style */
 table td button {
   padding: 4px 8px;
@@ -195,32 +209,80 @@ table td button:hover {
   opacity: 0.85;
 }
 
-/* notification overlay */
+/* notification box */
 #notify {
   position: fixed;
   inset: 0;
   display: none;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 
-/* notification box */
+/* notification content box */
 .notify-box {
   background-color: white;
+  color: #222;
+  font-weight: 500;
   padding: 20px 25px;
-  border-radius: 12px;
+  border-radius: 15px;
   border: 1px solid #ccc;
-  box-shadow: 0 4px 10px #aaaaaa;
-  max-width: 350px;
   width: 90%;
+  max-width: 350px;
   text-align: center;
+  box-shadow: 2px 2px 8px #aaaaaa;
 }
 
 /* notification text */
 .notify-msg {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  main {
+    flex-direction: column; /* in column up-down */
+    gap: 8px;
+  }
+
+  #studentForm,
+  .table-wrap {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  table th,
+  table td {
+    font-size: 13px;
+    padding: 5px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  body {
+    padding: 10px;
+  }
+
+  #studentForm {
+    padding: 10px;
+  }
+
+  #studentForm input {
+    padding: 6px;
+    font-size: 13px;
+  }
+
+  #addStd,
+  #resetBtn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  table th,
+  table td {
+    font-size: 12px;
+    padding: 4px;
+  }
 }
