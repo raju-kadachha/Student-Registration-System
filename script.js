@@ -1,61 +1,32 @@
-// Get the form and table body
+// get the form and table body
 const form = document.getElementById("studentForm");
 const tableBody = document.getElementById("studentTable");
 
-// Get input fields
+// get input fields
 const nameInput = document.getElementById("name");
 const idInput = document.getElementById("studentId");
 const emailInput = document.getElementById("email");
 const contactInput = document.getElementById("contact");
 const addStd = document.getElementById("addStd");
 
-// Table wrapper
+// table wrapper
 const tableWrapper = document.querySelector(".table-wrap");
 
-// Main array to store students
+// main data
 let students = [];
 let editIndex = -1;
 
-// Load students from localStorage
+/* load data from localStorage */
 function loadData() {
-    const savedData = localStorage.getItem("students");
-    if (savedData) {
-        students = JSON.parse(savedData);
+    const saved = localStorage.getItem("students");
+    if (saved) {
+        students = JSON.parse(saved);
         displayStudents();
     }
 }
 loadData();
 
-// Clear input fields
-function clearInputs() {
-    nameInput.value = "";
-    idInput.value = "";
-    emailInput.value = "";
-    contactInput.value = "";
-}
-
-// Display students in table
-function displayStudents() {
-    tableBody.innerHTML = "";
-
-    for (let i = 0; i < students.length; i++) {
-        const student = students[i];
-        const row = document.createElement("tr");
-        row.innerHTML = `
-      <td class="tname">${student.name}</td>
-      <td class="tid">${student.id}</td>
-      <td class="temail">${student.email}</td>
-      <td class="tcontact">${student.contact}</td>
-      <td>
-        <button onclick="editStudent(${i})">Edit</button>
-        <button onclick="deleteStudent(${i})">Delete</button>
-      </td>
-    `;
-        tableBody.appendChild(row);
-    }
-}
-
-// Form submit (add/update)
+/* form submit */
 form.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -64,26 +35,22 @@ form.addEventListener("submit", function (e) {
     const email = emailInput.value.trim();
     const contact = contactInput.value.trim();
 
+    // basic empty check
     if (!name || !id || !email || !contact) {
-        return; // skip empty field handling for now
-    }
-
-    // Check duplicates (basic)
-    for (let i = 0; i < students.length; i++) {
-        if (editIndex === i) continue;
-        if (students[i].id === id || students[i].email === email || students[i].contact === contact) {
-            return; // skip duplicates for now
-        }
+        alert("Please fill all fields");
+        return;
     }
 
     const student = { name, id, email, contact };
 
     if (editIndex === -1) {
         students.push(student);
+        alert("Student added successfully");
     } else {
         students[editIndex] = student;
         editIndex = -1;
         addStd.innerText = "Add Student";
+        alert("Student updated successfully");
     }
 
     saveData();
@@ -91,25 +58,64 @@ form.addEventListener("submit", function (e) {
     clearInputs();
 });
 
-// Edit student
+/* clear form */
+function clearInputs() {
+    nameInput.value = "";
+    idInput.value = "";
+    emailInput.value = "";
+    contactInput.value = "";
+}
+
+/* display students */
+function displayStudents() {
+    tableBody.innerHTML = "";
+
+    students.forEach((student, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+      <td class="tname">${student.name}</td>
+      <td class="tid">${student.id}</td>
+      <td class="temail">${student.email}</td>
+      <td class="tcontact">${student.contact}</td>
+      <td class="taction">
+        <button onclick="editStudent(${index})">Edit</button>
+        <button onclick="deleteStudent(${index})">Delete</button>
+      </td>
+    `;
+
+        tableBody.appendChild(row);
+    });
+
+    // table scroll
+    if (students.length >= 7) {
+        tableWrapper.classList.add("scroll");
+    } else {
+        tableWrapper.classList.remove("scroll");
+    }
+}
+
+/* edit student */
 function editStudent(index) {
-    const student = students[index];
-    nameInput.value = student.name;
-    idInput.value = student.id;
-    emailInput.value = student.email;
-    contactInput.value = student.contact;
-    addStd.innerText = "✏️ Update";
+    const s = students[index];
+    nameInput.value = s.name;
+    idInput.value = s.id;
+    emailInput.value = s.email;
+    contactInput.value = s.contact;
     editIndex = index;
+    addStd.innerText = "Update";
 }
 
-// Delete student
+/* delete student */
 function deleteStudent(index) {
-    students.splice(index, 1);
-    saveData();
-    displayStudents();
+    if (confirm("Do you want to delete this record?")) {
+        students.splice(index, 1);
+        saveData();
+        displayStudents();
+    }
 }
 
-// Save to localStorage
+/* save data */
 function saveData() {
     localStorage.setItem("students", JSON.stringify(students));
 }
