@@ -3,7 +3,89 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Student Registration System</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <!-- Header -->
+    <header>
+      <h1>Student Registration System</h1>
+      <p>Register, view, edit and delete student details</p>
+    </header>
+    <main>
+      <!-- Registration Form -->
+      <form id="studentForm">
+        <!-- Student Name -->
+        <label for="name">Student Name</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter student name"
+          pattern="[A-Za-z ]+"
+          maxlength="48"
+          title="Name should contain only letters"
+          required
+        />
+
+        <!-- Student ID -->
+        <label for="studentId">Student ID</label>
+        <input
+          type="tel"
+          id="studentId"
+          placeholder="6 digit ID"
+          pattern="[0-9]{6}"
+          title="Student ID must be exactly 6 digits"
+          minlength="6"
+          maxlength="6"
+          required
+        />
+
+        <!-- Email -->
+        <label for="email">Email ID</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter email address"
+          maxlength="100"
+          required
+        />
+
+        <!-- Contact Number (India) -->
+        <label for="contact">Contact Number</label>
+        <input
+          type="tel"
+          id="contact"
+          placeholder="10 digit mobile number"
+          pattern="[6-9][0-9]{9}"
+          maxlength="10"
+          minlength="10"
+          title="Enter valid Indian mobile number"
+          required
+        />
+
+        <button type="submit" id="addStd">Add Student</button>
+        <button type="reset" id="resetBtn">Reset</button>
+      </form>
+
+      <!-- Display Section -->
+      <section class="table-wrap">
+        <table>
+          <!-- <caption>Registered Students List</caption> -->
+          <thead>
+            <tr>
+              <th class="tname">Name</th>
+              <th class="tid">ID</th>
+              <th class="temail">Email</th>
+              <th class="tcontact">Contact</th>
+              <th class="taction">Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentTable">
+            <!-- here student rows will be added by JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
 </html>
