@@ -9,48 +9,98 @@ const emailInput = document.getElementById("email");
 const contactInput = document.getElementById("contact");
 const addStd = document.getElementById("addStd");
 
-// table wrapper
+// Table Box
 const tableWrapper = document.querySelector(".table-wrap");
 
-// main data
+// main array to store students
 let students = [];
 let editIndex = -1;
 
-/* load data from localStorage */
+// load students from localStorage 
 function loadData() {
-    const saved = localStorage.getItem("students");
-    if (saved) {
-        students = JSON.parse(saved);
+    const savedData = localStorage.getItem("students");
+    if (savedData) {
+        students = JSON.parse(savedData);
         displayStudents();
     }
 }
 loadData();
 
-/* form submit */
+//  form submit
 form.addEventListener("submit", function (e) {
-    e.preventDefault();
+    e.preventDefault(); // prevent page reload
 
     const name = nameInput.value.trim();
     const id = idInput.value.trim();
     const email = emailInput.value.trim();
     const contact = contactInput.value.trim();
 
-    // basic empty check
+
+    if (!validateInputs(name, id, email, contact)) return;
+    // check if any field is empty
     if (!name || !id || !email || !contact) {
-        alert("Please fill all fields");
+        notify("Please fill all fields", "⚠️");
         return;
+    }
+
+    // check for duplicates
+    for (let i = 0; i < students.length; i++) {
+        if (editIndex === i) continue; // skip the row being edited
+        if (students[i].id === id) {
+            notify("Student ID already exists", "❌");
+            return;
+        }
+        if (students[i].email === email) {
+            notify("Email already exists", "❌");
+            return;
+        }
+        if (students[i].contact === contact) {
+            notify("Contact number already exists", "❌");
+            return;
+        }
+    }
+
+    //validating all inputs using Regex Patterns in Javascript
+    function validateInputs(name, id, email, contact) {
+        // Name: letters and spaces only
+        if (!/^[A-Za-z ]+$/.test(name)) {
+            notify("Name must contain letters and spaces only", "⚠️");
+            return false;
+        }
+
+        // ID: exactly 6 digits
+        if (!/^\d{6}$/.test(id)) {
+            notify("Student ID must be exactly 6 digits", "⚠️");
+            return false;
+        }
+
+        // Email: basic validation
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            notify("Enter a valid email address", "⚠️");
+            return false;
+        }
+
+        // Contact: 10 digits starting 6-9
+        if (!/^[6-9]\d{9}$/.test(contact)) {
+            notify("Enter a valid 10-digit Indian mobile number", "⚠️");
+            return false;
+        }
+
+        // All valid
+        return true;
     }
 
     const student = { name, id, email, contact };
 
+    // add new student or update existing
     if (editIndex === -1) {
         students.push(student);
-        alert("Student added successfully");
+        notify("Student added successfully", "✔️");
     } else {
         students[editIndex] = student;
         editIndex = -1;
         addStd.innerText = "Add Student";
-        alert("Student updated successfully");
+        notify("Student updated successfully", "✔️");
     }
 
     saveData();
@@ -58,7 +108,7 @@ form.addEventListener("submit", function (e) {
     clearInputs();
 });
 
-/* clear form */
+// clear input fields
 function clearInputs() {
     nameInput.value = "";
     idInput.value = "";
@@ -66,28 +116,27 @@ function clearInputs() {
     contactInput.value = "";
 }
 
-/* display students */
+// display students in table
 function displayStudents() {
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = ""; // clear table
 
-    students.forEach((student, index) => {
+    for (let i = 0; i < students.length; i++) {
+        const student = students[i];
         const row = document.createElement("tr");
-
         row.innerHTML = `
-      <td class="tname">${student.name}</td>
-      <td class="tid">${student.id}</td>
-      <td class="temail">${student.email}</td>
-      <td class="tcontact">${student.contact}</td>
-      <td class="taction">
-        <button onclick="editStudent(${index})">Edit</button>
-        <button onclick="deleteStudent(${index})">Delete</button>
-      </td>
-    `;
-
+            <td class="tname">${student.name}</td>
+            <td class="tid">${student.id}</td>
+            <td class="temail">${student.email}</td>
+            <td class="tcontact">${student.contact}</td>
+            <td>
+                <button onclick="editStudent(${i})">Edit</button>
+                <button onclick="deleteStudent(${i})">Delete</button>
+            </td>
+        `;
         tableBody.appendChild(row);
-    });
+    }
 
-    // table scroll
+    // add scroll if rows >= 7
     if (students.length >= 7) {
         tableWrapper.classList.add("scroll");
     } else {
@@ -95,27 +144,47 @@ function displayStudents() {
     }
 }
 
-/* edit student */
+// edit student
 function editStudent(index) {
-    const s = students[index];
-    nameInput.value = s.name;
-    idInput.value = s.id;
-    emailInput.value = s.email;
-    contactInput.value = s.contact;
+    nameInput.focus(); //shift focus to name
+    const student = students[index];
+    nameInput.value = student.name;
+    idInput.value = student.id;
+    emailInput.value = student.email;
+    contactInput.value = student.contact;
+    addStd.innerText = "✏️ Update";
+
     editIndex = index;
-    addStd.innerText = "Update";
 }
 
-/* delete student */
+// delete student
 function deleteStudent(index) {
     if (confirm("Do you want to delete this record?")) {
         students.splice(index, 1);
         saveData();
         displayStudents();
+        notify("Student deleted successfully", "🗑️");
     }
 }
 
-/* save data */
+// save students to localStorage
 function saveData() {
     localStorage.setItem("students", JSON.stringify(students));
+}
+
+// show notification
+function notify(message, icon = "") {
+    const notifyDiv = document.getElementById("notify");
+    const msgDiv = document.getElementById("notify-msg");
+
+    msgDiv.textContent = icon + " " + message;
+    notifyDiv.style.display = "flex";
+
+    const main = document.querySelector("main");
+    if (main) main.style.filter = "blur(1px)";
+
+    setTimeout(() => {
+        notifyDiv.style.display = "none";
+        if (main) main.style.filter = "none";
+    }, 2000);
 }
