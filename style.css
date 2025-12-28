@@ -1,0 +1,196 @@
+/* reset all default margin and padding and box size */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* stop horizontal scroll */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* main body style and font */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  background-color: #f4f6f8; /* light gray background */
+  color: #333; /* dark text */
+}
+
+/* header style */
+header {
+  text-align: center; /* center text */
+  margin-bottom: 15px; /* space below header */
+}
+
+/* header title */
+header h1 {
+  font-size: 24px;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* header small text */
+header p {
+  font-size: 14px;
+  color: #555;
+}
+
+/* main layout container */
+main {
+  display: flex;
+  flex-wrap: wrap; /* allow wrap on small screen */
+  gap: 10px; /* gap between form and table */
+  align-items: flex-start;
+}
+
+/* form box */
+#studentForm {
+  flex: 0 1 33%; /* take 1/3 space on desktop */
+  min-width: 250px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 8px #cccccc; /* soft shadow */
+}
+
+/* form labels */
+#studentForm label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4px;
+  color: #2c3e50;
+}
+
+/* form inputs */
+#studentForm input {
+  width: 97%; /* full width */
+  padding: 7px;
+  margin-bottom: 10px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* input focus */
+#studentForm input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* submit and reset buttons */
+#addStd,
+#resetBtn {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+#addStd:hover {
+  background-color: #1f6fb2;
+}
+
+/* reset button */
+#resetBtn {
+  margin-left: 15px;
+  background-color: #fc626f; /* pinkish red */
+  transition: background-color 0.2s;
+}
+#resetBtn:hover {
+  background-color: #ea4858;
+}
+
+/* table box style */
+.table-wrap {
+  flex: 0 1 66%;
+  min-width: 300px;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 8px #cccccc;
+  overflow-x: hidden; /* hide horizontal scroll */
+}
+
+/* table main style */
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* fix column width */
+}
+
+/* table th and td */
+table th,
+table td {
+  padding: 6px 6px;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: left;
+  vertical-align: middle;
+  white-space: normal;
+  word-break: break-word; /* break long words */
+  overflow-wrap: anywhere;
+}
+
+/* table header style */
+table th {
+  background-color: #3498db;
+  color: white;
+  font-weight: 600;
+}
+
+/*Different rows for easier read */
+table tbody tr:nth-child(even) {
+  background-color: #edf6ff;
+}
+
+/* control column width */
+.tname {
+  width: 22%;
+}
+.tid {
+  width: 12%;
+}
+.temail {
+  width: 28%;
+}
+.tcontact {
+  width: 18%;
+}
+.taction {
+  width: 20%;
+  text-align: center;
+}
+
+/* table buttons style */
+table td button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 2px;
+  white-space: nowrap;
+}
+
+/* update and delete buttons */
+table td button:first-child {
+  background-color: #f39c12;
+  color: white;
+}
+
+table td button:last-child {
+  background-color: #e74c3c;
+  color: white;
+}
+
+table td button:hover {
+  opacity: 0.85;
+}
