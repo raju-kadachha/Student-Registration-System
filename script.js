@@ -28,24 +28,25 @@ loadData();
 
 //  form submit
 form.addEventListener("submit", function (e) {
-    e.preventDefault(); // prevent page reload
+    e.preventDefault(); // stop page reload
 
     const name = nameInput.value.trim();
     const id = idInput.value.trim();
     const email = emailInput.value.trim();
     const contact = contactInput.value.trim();
 
-
-    if (!validateInputs(name, id, email, contact)) return;
-    // check if any field is empty
+    // empty field check
     if (!name || !id || !email || !contact) {
         notify("Please fill all fields", "⚠️");
         return;
     }
 
+    //validate all input - regex used
+    if (!validateInputs(name, id, email, contact)) return;
+
     // check for duplicates
     for (let i = 0; i < students.length; i++) {
-        if (editIndex === i) continue; // skip the row being edited
+        if (editIndex === i) continue; // skip editing row
         if (students[i].id === id) {
             notify("Student ID already exists", "❌");
             return;
@@ -58,36 +59,6 @@ form.addEventListener("submit", function (e) {
             notify("Contact number already exists", "❌");
             return;
         }
-    }
-
-    //validating all inputs using Regex Patterns in Javascript
-    function validateInputs(name, id, email, contact) {
-        // Name: letters and spaces only
-        if (!/^[A-Za-z ]+$/.test(name)) {
-            notify("Name must contain letters and spaces only", "⚠️");
-            return false;
-        }
-
-        // ID: exactly 6 digits
-        if (!/^\d{6}$/.test(id)) {
-            notify("Student ID must be exactly 6 digits", "⚠️");
-            return false;
-        }
-
-        // Email: basic validation
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            notify("Enter a valid email address", "⚠️");
-            return false;
-        }
-
-        // Contact: 10 digits starting 6-9
-        if (!/^[6-9]\d{9}$/.test(contact)) {
-            notify("Enter a valid 10-digit Indian mobile number", "⚠️");
-            return false;
-        }
-
-        // All valid
-        return true;
     }
 
     const student = { name, id, email, contact };
@@ -136,7 +107,7 @@ function displayStudents() {
         tableBody.appendChild(row);
     }
 
-    // add scroll if rows >= 7
+    // add scroll 
     if (students.length >= 7) {
         tableWrapper.classList.add("scroll");
     } else {
@@ -187,4 +158,33 @@ function notify(message, icon = "") {
         notifyDiv.style.display = "none";
         if (main) main.style.filter = "none";
     }, 2000);
+}
+
+//validating all inputs regex
+function validateInputs(name, id, email, contact) {
+    // Name: letters and spaces only
+    if (!/^[A-Za-z ]+$/.test(name)) {
+        notify("Name must contain letters and spaces only", "⚠️");
+        return false;
+    }
+
+    // ID: exactly 6 digits
+    if (!/^\d{6}$/.test(id)) {
+        notify("Student ID must be exactly 6 digits", "⚠️");
+        return false;
+    }
+
+    // Email: basic validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        notify("Enter a valid email address", "⚠️");
+        return false;
+    }
+
+    // Contact: 10 digits starting 6-9
+    if (!/^[6-9]\d{9}$/.test(contact)) {
+        notify("Enter a valid 10-digit Indian mobile number", "⚠️");
+        return false;
+    }
+
+    return true;
 }
