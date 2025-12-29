@@ -119,10 +119,10 @@ function displayStudents() {
 function editStudent(index) {
     nameInput.focus(); //shift focus to name
     const student = students[index];
-    nameInput.value = student.name;
-    idInput.value = student.id;
-    emailInput.value = student.email;
-    contactInput.value = student.contact;
+    nameInput.value = student.name.trim();
+    idInput.value = student.id.trim();
+    emailInput.value = student.email.trim();
+    contactInput.value = student.contact.trim();
     addStd.innerText = "✏️ Update";
 
     editIndex = index;
